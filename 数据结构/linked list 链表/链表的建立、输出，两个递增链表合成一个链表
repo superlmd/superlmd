@@ -1,0 +1,96 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+int a1[20];
+int a2[20];
+int i = 1;	// i 和 j 分别为数组的长度 
+int j = 1;
+struct node
+{	int data;
+	node *next;
+};
+node* merge(node * a1head ,node *a2head) // 合并链表
+{	node *phead,*p;
+	if (a1head->data < a2head->data)
+	{	phead = p = a1head;
+		a1head= a1head->next;
+	}
+	else if (a1head->data > a2head->data)
+	{	phead = p = a2head;
+		a2head = a2head->next;
+	}
+	else if (a1head->data == a2head->data)
+	{	phead = p = a1head;
+		a1head = a1head->next;
+		node *t = a2head;
+		a2head = a2head->next;
+		delete(t);
+	}
+	while (a1head&&a2head)	// a1链表，a2链表 都存在时 
+	{	if (a1head->data < a2head->data)	// a1数据 小于等于 a2数据时 
+		{	p->next = a1head;
+			p = a1head;
+			a1head = a1head->next;
+		}
+		else if (a1head->data > a2head->data)	
+		{	p->next = a2head;
+			p = a2head;
+			a2head = a2head->next; 
+		}
+		else if (a1head->data == a2head->data)	// 如果两个节点里面的值是相等的，那么只保留一个值，另外一个删掉它 
+		{	p->next = a1head;
+			p = a1head;
+			a1head = a1head->next;
+			node *t = a2head;
+			a2head = a2head->next;
+			delete(t);
+		}
+	}
+	if(a1head==NULL)	// a1链表为空，主链表直接连到 a2 
+		p->next = a2head;
+	if(a2head==NULL)	// a2链表为空，主链表直接连到 a1 
+		p->next = a1head;
+	return phead;
+}
+void createlist(node* &phead,int len,int a[])	// 创建链表 
+{	node *p = phead;			// phead  传的是引用和指针 ，引用是为了修改本身，指针是为了将整个链表链接起来 
+	for (int i = 2 ; i<=len;i++)
+	{	node *q = new node;
+		q->data = a[i];
+		p->next = q;
+		p = q;
+	}
+	p->next = NULL;
+}
+void outlist(node *phead)	//输出链表 
+{	node *p = phead;
+	while(p)
+	{	cout<<p->data<<" ";
+		p = p->next;
+	}
+	cout<<endl;	
+}	
+int main()
+{	cout<<"请输入第一个链表的数据"<<endl; 
+	while(scanf("%d",&a1[i])==1)	// 实际上 i-1 为 a1数组 的长度 
+	{	i++;
+	}
+	getchar();
+	cout<<"请输入第二个链表的数据"<<endl;
+	while(scanf("%d",&a2[j])==1)	// 实际上 j-1 为 a2数组 的长度
+	{	j++;
+	}
+	cout<<"i= "<<i-1<<" j= "<<j-1<<endl;
+	node *b1 = new node,*b2 = new node;
+	b1->data = a1[1];
+	b2->data = a2[1];
+	createlist(b1,i-1,a1);
+	createlist(b2,j-1,a2);
+	//outlist(b1);
+	//outlist(b2);
+	node *final = merge(b1,b2);
+	while(final)
+	{	cout<<final->data<<" ";
+		final = final->next; 
+	}
+} 
