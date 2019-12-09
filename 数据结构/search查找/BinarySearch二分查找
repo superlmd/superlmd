@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+int BinarySearch1(int *s,int find,int low,int high)
+{	int mid = (low+high)/2;
+	if (low > high)
+		return 0;		//递归思想 
+	if (s[mid] == find)
+		return mid;
+	else if (s[mid] > find)
+		return  BinarySearch1(s,find,low,mid-1);
+	else
+		return BinarySearch1(s,find,mid+1,high);
+}
+int BinarySearch2(int *s,int find,int low,int high)
+{	while (low <= high)		//循环思想 
+	{	int mid = (low + high)/2;
+		if (find == s[mid])
+			return mid;
+		else if (s[mid] > find)
+			high = mid - 1;
+		else 
+			low = mid + 1;
+	}
+	return 0;
+}
+int main()
+{	int num[100]={0,12,34,56,67,78,89,90,100,102,103,105,120};
+	int find = 1000;
+	cout<<BinarySearch1(num,find,1,12)<<endl;
+	cout<<BinarySearch2(num,find,1,12);
+	return 0;
+ } 
