@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct node
+{	char data;
+	node *next;
+}; 
+
+void part(node *head,node *&big,node *&num,node *&other) //将原先的链表分成三个链表 
+{	node *q = head;
+	while(q != NULL)
+	{	if (q->data>='A'&&q->data<='Z')	// 头插法 将原先的链表插入到其余的链表中 
+		{	node *t = q;
+			q = q->next;
+			t->next = big;
+			big = t;
+		}
+		else if (q->data>='0'&&q->data<='9')
+		{	node *t = q;
+			q = q->next;
+			t->next = num;
+			num = t;
+		}
+		else
+		{	node *t = q;
+			q = q->next;
+			t->next = other;
+			other = t;
+		}
+	}
+}
+
+void createlist(char *a,int len,node *&head)  //创建链表
+{	node *p = head;
+	for (int i = 2 ;i<=len;i++)
+	{	node *t = new node;
+		t->data = a[i];
+		p->next = t;
+		p = t;
+	}
+	p->next = NULL;
+}
+
+void out(node *head)  // 输出链表
+{	while(head)
+	{	cout<<head->data<<" ";
+		head = head->next;
+	}
+	cout<<endl<<endl;
+}
+int main()
+{	char a[1000];
+	gets(a+1);
+	int len = strlen(a+1);
+	cout<<"len ="<<len<<endl; 
+	node *head = new node;	
+	head->data = a[1];
+	createlist(a,len,head);	// 数组转化为链表 
+	
+	cout<<"原链表的输出"<<endl;
+	out(head);
+	
+	node *big= NULL;
+	node *num= NULL;
+	node *other = 0;
+	part(head,big,num,other);
+	
+	cout<<"大写字母链表的输出"<<endl;
+	out(big);
+	
+	cout<<"数字链表的输出"<<endl;
+	out(num);
+	
+	cout<<"其他字符链表的输出"<<endl;
+	out(other);
+	return 0;
+}
